@@ -4,7 +4,7 @@
 // xip is a small name server which sends back any IP address found in the provided hostname.
 //
 // When queried for type A, it sends back the parsed IPv4 address.
-// In the additional section the port number and transport are shown.
+// In the additional section the client host:port and transport are shown.
 //
 // Basic use pattern:
 //
@@ -25,7 +25,7 @@
 //    foo.10.0.0.82.xip.name.	0	IN	A	10.0.0.82
 //
 //    ;; ADDITIONAL SECTION:
-//    xip.name.		0	IN	TXT	"IP: 188.126.74.76:52575 (udp)"
+//    xip.name.		0	IN	TXT	"Client: 188.126.74.76:52575 (udp)"
 //
 //    ;; Query time: 27 msec
 //    ;; SERVER: 188.166.43.179#53(188.166.43.179)
@@ -49,17 +49,19 @@ import (
 )
 
 var (
-	verbose  = flag.Bool("v", false, "Verbose")
-	compress = flag.Bool("c", false, "compress replies")
-	fqdn     = flag.String("fqdn", "xip.name.", "FQDN to handle")
-	port     = flag.String("p", "53", "The port to bind on")
-	ip       = flag.String("ip", "188.166.43.179", "The IP of xip.name")
+	verbose = flag.Bool("v", false, "Verbose")
+	fqdn    = flag.String("fqdn", "xip.name.", "FQDN to handle")
+	port    = flag.String("p", "53", "The port to bind on")
+	ip      = flag.String("ip", "188.166.43.179", "The IP of xip.name")
 
 	ipPattern = regexp.MustCompile(`(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})`)
+	defaultIP net.IP
 )
 
 func main() {
 	flag.Parse()
+
+	defaultIP = net.ParseIP(*ip).To4()
 
 	dns.HandleFunc(*fqdn, handleDNS)
 
@@ -82,7 +84,7 @@ loop:
 func handleDNS(w dns.ResponseWriter, r *dns.Msg) {
 	m := new(dns.Msg)
 	m.SetReply(r)
-	m.Compress = *compress
+	m.Compress = false
 
 	var (
 		rr  dns.RR
@@ -90,27 +92,31 @@ func handleDNS(w dns.ResponseWriter, r *dns.Msg) {
 	)
 
 	if ip, ok := w.RemoteAddr().(*net.UDPAddr); ok {
-		str = "IP: " + ip.String() + " (udp)"
+		str = "Client: " + ip.String() + " (udp)"
 	}
 
 	if ip, ok := w.RemoteAddr().(*net.TCPAddr); ok {
-		str = "IP: " + ip.String() + " (tcp)"
+		str = "Client: " + ip.String() + " (tcp)"
 	}
+
+	if len(r.Question) == 0 {
+		return
+	}
+
+	q := r.Question[0]
 
 	rr = new(dns.A)
 	rr.(*dns.A).Hdr = dns.RR_Header{
-		Name:   r.Question[0].Name,
+		Name:   q.Name,
 		Rrtype: dns.TypeA,
 		Class:  dns.ClassINET,
 		Ttl:    300,
 	}
 
-	if r.Question[0].Name == *fqdn || r.Question[0].Name == "www."+*fqdn {
-		rr.(*dns.A).A = net.ParseIP(*ip).To4()
-	} else {
-		ipStr := ipPattern.FindString(r.Question[0].Name)
-
+	if ipStr := ipPattern.FindString(q.Name); ipStr != "" {
 		rr.(*dns.A).A = net.ParseIP(ipStr).To4()
+	} else {
+		rr.(*dns.A).A = defaultIP
 	}
 
 	t := new(dns.TXT)
@@ -142,7 +148,7 @@ func handleDNS(w dns.ResponseWriter, r *dns.Msg) {
 			return
 		}
 
-		soa, _ := dns.NewRR(`xip.name. 0 IN SOA 2009032802 21600 7200 604800 3600`)
+		soa, _ := dns.NewRR(`xip.name. xip.name. 0 IN SOA 2014123101 21600 7200 604800 3600`)
 
 		c <- &dns.Envelope{RR: []dns.RR{soa, t, rr, soa}}
 		w.Hijack()
