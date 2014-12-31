@@ -1,12 +1,29 @@
 xip.name
 ========
 
-A simple wildcard DNS inspired by [xip.io](http://xip.io/)
-
 [![GoDoc](https://img.shields.io/badge/godoc-reference-blue.svg?style=flat)](https://godoc.org/github.com/peterhellberg/xip.name)
 [![License MIT](https://img.shields.io/badge/license-MIT-lightgrey.svg?style=flat)](https://github.com/peterhellberg/xip.name#license-mit)
 
-## Donate
+## What is xip.name?
+
+A simple wildcard DNS inspired by [xip.io](http://xip.io/)
+
+```bash
+        10.0.0.1.xip.name  resolves to  10.0.0.1
+    www.10.0.0.2.xip.name  resolves to  10.0.0.2
+    foo.10.0.0.3.xip.name  resolves to  10.0.0.3
+bar.baz.10.0.0.4.xip.name  resolves to  10.0.0.4
+```
+
+## How does it work?
+
+xip.name runs a custom DNS server which extracts any IP address found
+in the requested domain name and sends it back in the response.
+
+
+## Does it cost anything to use xip.name?
+
+No, but you are welcome to donate if you find the service useful.
 
 Bitcoin: **[16f4vuZcpybd7rfprjB6Ki87BNVbtMA1M5](https://blockchain.info/address/16f4vuZcpybd7rfprjB6Ki87BNVbtMA1M5)**
 
