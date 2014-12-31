@@ -8,29 +8,29 @@
 //
 // Basic use pattern:
 //
-// 		dig @xip.name www.xip.name A
+//    dig @xip.name foo.10.0.0.82.xip.name A
 //
-// 		; <<>> DiG 9.8.3-P1 <<>> @xip.name www.xip.name A
-// 		; (1 server found)
-// 		;; global options: +cmd
-// 		;; Got answer:
-// 		;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 47078
-// 		;; flags: qr rd; QUERY: 1, ANSWER: 1, AUTHORITY: 0, ADDITIONAL: 1
-// 		;; WARNING: recursion requested but not available
+//    ; <<>> DiG 9.8.3-P1 <<>> @xip.name foo.10.0.0.82.xip.name A
+//    ; (1 server found)
+//    ;; global options: +cmd
+//    ;; Got answer:
+//    ;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 13574
+//    ;; flags: qr rd; QUERY: 1, ANSWER: 1, AUTHORITY: 0, ADDITIONAL: 1
+//    ;; WARNING: recursion requested but not available
 //
-// 		;; QUESTION SECTION:
-// 		;www.xip.name.			IN	A
+//    ;; QUESTION SECTION:
+//    ;foo.10.0.0.82.xip.name.		IN	A
 //
-// 		;; ANSWER SECTION:
-// 		www.xip.name.		0	IN	A	188.166.43.179
+//    ;; ANSWER SECTION:
+//    foo.10.0.0.82.xip.name.	0	IN	A	10.0.0.82
 //
-// 		;; ADDITIONAL SECTION:
-// 		xip.name.		0	IN	TXT	"IP: 188.126.74.76:58956 (udp)"
+//    ;; ADDITIONAL SECTION:
+//    xip.name.		0	IN	TXT	"IP: 188.126.74.76:52575 (udp)"
 //
-// 		;; Query time: 31 msec
-// 		;; SERVER: 188.166.43.179#53(188.166.43.179)
-// 		;; WHEN: Wed Dec 31 02:13:50 2014
-// 		;; MSG SIZE  rcvd: 108
+//    ;; Query time: 27 msec
+//    ;; SERVER: 188.166.43.179#53(188.166.43.179)
+//    ;; WHEN: Wed Dec 31 02:55:51 2014
+//    ;; MSG SIZE  rcvd: 128
 //
 // Initially based on the reflect example found at https://github.com/miekg/exdns
 //
@@ -106,7 +106,7 @@ func handleDNS(w dns.ResponseWriter, r *dns.Msg) {
 	}
 
 	if r.Question[0].Name == "xip.name." || r.Question[0].Name == "www.xip.name." {
-		rr.(*dns.A).A = net.ParseIP("188.166.43.179").To4()
+		rr.(*dns.A).A = net.ParseIP(*ip).To4()
 	} else {
 		ipStr := ipPattern.FindString(r.Question[0].Name)
 
@@ -146,9 +146,8 @@ func handleDNS(w dns.ResponseWriter, r *dns.Msg) {
 
 		c <- &dns.Envelope{RR: []dns.RR{soa, t, rr, soa}}
 		w.Hijack()
-		// w.Close() // Client closes connection
-		return
 
+		return
 	}
 
 	if *verbose {
