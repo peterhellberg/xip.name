@@ -1,4 +1,4 @@
-xip.name
+[xip.name](http://xip.name/)
 ========
 
 [![GoDoc](https://img.shields.io/badge/godoc-reference-blue.svg?style=flat)](https://godoc.org/github.com/peterhellberg/xip.name)
