@@ -8,9 +8,7 @@ A simple wildcard DNS server inspired by [xip.io](http://xip.io/)
 
 ## Donate
 
-Bitcoin: **16f4vuZcpybd7rfprjB6Ki87BNVbtMA1M5**
-
-![16f4vuZcpybd7rfprjB6Ki87BNVbtMA1M5](https://blockchain.info/qr?data=16f4vuZcpybd7rfprjB6Ki87BNVbtMA1M5&size=120#.png)
+Bitcoin: **[16f4vuZcpybd7rfprjB6Ki87BNVbtMA1M5](https://blockchain.info/address/16f4vuZcpybd7rfprjB6Ki87BNVbtMA1M5)**
 
 ## License (MIT)
 
