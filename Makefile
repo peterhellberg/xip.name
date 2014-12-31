@@ -6,6 +6,12 @@ build:
 linux:
 	GOOS=linux CGO_ENABLED=0 go build -o xip.linux xip.go
 
+deploy: linux
+	scp etc/init/xip.name.conf root@xip.name:/etc/init/
+	ssh root@xip.name 'service xip.name stop || true'
+	scp xip.linux root@xip.name:/usr/local/bin/xip.name
+	ssh root@xip.name 'service xip.name start'
+
 run:
 	go run xip.go -p 8053 -v
 
