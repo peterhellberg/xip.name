@@ -1,0 +1,14 @@
+/* TEAM */
+
+  Developer:    Peter Hellberg
+  Twitter:      @peterhellberg
+  Location:     Stockholm, Sweden
+
+/* SITE */
+
+  Source Code:  <https://github.com/peterhellberg/xip/>
+
+  Languages:    Go
+  Software:     vim, git
+
+  Hosting:      DigitalOcean <https://www.digitalocean.com/?refcode=cd245791f86e>
