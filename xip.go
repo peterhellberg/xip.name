@@ -1,7 +1,7 @@
 // Copyright 2014 Peter Hellberg.
 // Released under the terms of the MIT license.
 
-// xip is a small name server which sends back any IP address found in the provided hostname.
+// xip.name is a small name server which sends back any IP address found in the provided hostname.
 //
 // When queried for type A, it sends back the parsed IPv4 address.
 // In the additional section the client host:port and transport are shown.
