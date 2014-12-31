@@ -84,20 +84,8 @@ loop:
 func handleDNS(w dns.ResponseWriter, r *dns.Msg) {
 	m := new(dns.Msg)
 	m.SetReply(r)
-	m.Compress = false
 
-	var (
-		rr  dns.RR
-		str string
-	)
-
-	if ip, ok := w.RemoteAddr().(*net.UDPAddr); ok {
-		str = "Client: " + ip.String() + " (udp)"
-	}
-
-	if ip, ok := w.RemoteAddr().(*net.TCPAddr); ok {
-		str = "Client: " + ip.String() + " (tcp)"
-	}
+	var rr dns.RR
 
 	if len(r.Question) == 0 {
 		return
@@ -126,7 +114,7 @@ func handleDNS(w dns.ResponseWriter, r *dns.Msg) {
 		Class:  dns.ClassINET,
 		Ttl:    0,
 	}
-	t.Txt = []string{str}
+	t.Txt = []string{"Client: " + clientString(w.RemoteAddr())}
 
 	switch r.Question[0].Qtype {
 	case dns.TypeTXT:
@@ -174,4 +162,16 @@ func serve(net string) {
 	if err != nil {
 		fmt.Printf("Failed to setup the "+net+" server: %s\n", err.Error())
 	}
+}
+
+func clientString(a net.Addr) string {
+	if ip, ok := a.(*net.UDPAddr); ok {
+		return ip.String() + " (udp)"
+	}
+
+	if ip, ok := a.(*net.TCPAddr); ok {
+		return ip.String() + " (tcp)"
+	}
+
+	return "unknown"
 }
