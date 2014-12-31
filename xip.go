@@ -102,7 +102,7 @@ func handleDNS(w dns.ResponseWriter, r *dns.Msg) {
 		Name:   r.Question[0].Name,
 		Rrtype: dns.TypeA,
 		Class:  dns.ClassINET,
-		Ttl:    0,
+		Ttl:    300,
 	}
 
 	if r.Question[0].Name == "xip.name." || r.Question[0].Name == "www.xip.name." {
