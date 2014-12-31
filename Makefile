@@ -6,8 +6,13 @@ build:
 linux:
 	GOOS=linux CGO_ENABLED=0 go build -o xip.linux xip.go
 
-deploy: linux
+init:
 	scp etc/init/xip.name.conf root@xip.name:/etc/init/
+
+web:
+	scp usr/share/nginx/html/* root@xip.name:/usr/share/nginx/html/
+
+deploy: linux init web
 	ssh root@xip.name 'service xip.name stop || true'
 	scp xip.linux root@xip.name:/usr/local/bin/xip.name
 	ssh root@xip.name 'service xip.name start'
