@@ -105,7 +105,7 @@ func handleDNS(w dns.ResponseWriter, r *dns.Msg) {
 		Ttl:    300,
 	}
 
-	if r.Question[0].Name == "xip.name." || r.Question[0].Name == "www.xip.name." {
+	if r.Question[0].Name == *fqdn || r.Question[0].Name == "www."+*fqdn {
 		rr.(*dns.A).A = net.ParseIP(*ip).To4()
 	} else {
 		ipStr := ipPattern.FindString(r.Question[0].Name)
