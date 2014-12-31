@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+
+    <title>xip.name: A simple wildcard DNS inspired by xip.io</title>
+
+    <meta name="author" content="Peter Hellberg">
+    <meta property="og:title" content="xip.name: A simple wildcard DNS inspired by xip.io" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="http://xip.name/" />
+    <meta property="og:image" content="http://c7.se/images/logo_square.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="author" type="text/plain" href="http://c7.se/humans.txt" />
+
+    <style>
+      body { margin: 0 auto; background: #111; color: #ddd; }
+      pre { font-family: monaco,Consolas,Lucida Console,monospace; color: #eee; }
+      pre p { font-size: 0.7em; }
+      pre b { color: #F2DF68; margin-bottom: 0.3em; display: inline-block; }
+      pre span { color: #FE5D26; }
+      a { text-decoration: none; color: #7CAF3C; }
+      a:hover { text-decoration: underline; }
+
+      @media only screen and (min-width: 768px) {
+        body { font-size: 20px; width: 38em; }
+      }
+
+      @media only screen and (max-width: 767px) {
+        body { font-size: 15px; width: 38em; }
+        pre p { font-size: 0.8em; }
+      }
+
+      @media only screen and (max-width: 600px) {
+        body { font-size: 12px; width: 38em; }
+        pre p { font-size: 0.9em; }
+      }
+
+      @media only screen and (max-width: 500px) {
+        body { font-size: 9px; width: 38em; }
+        pre p { font-size: 1em; }
+      }
+    </style>
+  </head>
+  <body>
+    <pre>
+         oo
+
+dP.  .dP dP  88d888b.    88d888b. .d8888b. 88d8b.d8b. .d8888b.
+ `8bd8'  88  88'  `88    88'  `88 88'  `88 88'`88'`88 88ooood8
+ .d88b.  88  88.  .88 dP 88    88 88.  .88 88  88  88 88.  ...
+dP'  `dP dP  88Y888P' 88 dP    dP `88888P8 dP  dP  dP `88888P'
+oooooooooooo~88~ooooooooooooooooooooooooooooooooooooooooooooooo
+             dP                               by <a href="http://c7.se">Peter Hellberg</a><p>
+        <b>What is xip.name?</b>
+        xip.name is a simple wildcard DNS inspired by <a href="http://xip.io/">xip.io</a>
+
+                <span>10.0.0.1</span>.xip.name  resolves to  <span>10.0.0.1</span>
+            www.<span>10.0.0.2</span>.xip.name  resolves to  <span>10.0.0.2</span>
+            foo.<span>10.0.0.3</span>.xip.name  resolves to  <span>10.0.0.3</span>
+        bar.baz.<span>10.0.0.4</span>.xip.name  resolves to  <span>10.0.0.4</span>
+
+
+        <b>How does it work?</b>
+        xip.name runs a <a href="http://github.com/peterhellberg/xip">custom DNS server</a> which extracts
+        any IP address found in the requested domain name
+        and sends it back in the response.
+
+
+        <b>Does it cost anything to use xip.name?</b>
+        No, but you are welcome to <a href="https://blockchain.info/address/16f4vuZcpybd7rfprjB6Ki87BNVbtMA1M5">donate</a> if you
+        find the service useful.</p></pre>
+  </body>
+</html>
