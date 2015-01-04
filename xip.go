@@ -85,38 +85,15 @@ func handleDNS(w dns.ResponseWriter, r *dns.Msg) {
 	m := new(dns.Msg)
 	m.SetReply(r)
 
-	var rr dns.RR
-
 	if len(r.Question) == 0 {
 		return
 	}
 
 	q := r.Question[0]
+	t := dnsTXT(clientString(w.RemoteAddr()))
+	rr := dnsRR(q.Name)
 
-	rr = new(dns.A)
-	rr.(*dns.A).Hdr = dns.RR_Header{
-		Name:   q.Name,
-		Rrtype: dns.TypeA,
-		Class:  dns.ClassINET,
-		Ttl:    300,
-	}
-
-	if ipStr := ipPattern.FindString(q.Name); ipStr != "" {
-		rr.(*dns.A).A = net.ParseIP(ipStr).To4()
-	} else {
-		rr.(*dns.A).A = defaultIP
-	}
-
-	t := new(dns.TXT)
-	t.Hdr = dns.RR_Header{
-		Name:   *fqdn,
-		Rrtype: dns.TypeTXT,
-		Class:  dns.ClassINET,
-		Ttl:    0,
-	}
-	t.Txt = []string{"Client: " + clientString(w.RemoteAddr())}
-
-	switch r.Question[0].Qtype {
+	switch q.Qtype {
 	case dns.TypeTXT:
 		m.Answer = append(m.Answer, t)
 		m.Extra = append(m.Extra, rr)
@@ -152,16 +129,49 @@ func handleDNS(w dns.ResponseWriter, r *dns.Msg) {
 }
 
 func serve(net string) {
-	server := &dns.Server{
+	err := newServer(net).ListenAndServe()
+	if err != nil {
+		fmt.Printf("Failed to setup the "+net+" server: %s\n", err.Error())
+	}
+}
+
+func newServer(net string) *dns.Server {
+	return &dns.Server{
 		Addr:       ":" + *port,
 		Net:        net,
 		TsigSecret: nil,
 	}
+}
 
-	err := server.ListenAndServe()
-	if err != nil {
-		fmt.Printf("Failed to setup the "+net+" server: %s\n", err.Error())
+func dnsRR(name string) (rr dns.RR) {
+	rr = new(dns.A)
+	rr.(*dns.A).Hdr = dns.RR_Header{
+		Name:   name,
+		Rrtype: dns.TypeA,
+		Class:  dns.ClassINET,
+		Ttl:    300,
 	}
+
+	if ipStr := ipPattern.FindString(name); ipStr != "" {
+		rr.(*dns.A).A = net.ParseIP(ipStr).To4()
+	} else {
+		rr.(*dns.A).A = defaultIP
+	}
+
+	return rr
+}
+
+func dnsTXT(s string) *dns.TXT {
+	t := new(dns.TXT)
+	t.Txt = []string{"Client: " + s}
+	t.Hdr = dns.RR_Header{
+		Name:   *fqdn,
+		Rrtype: dns.TypeTXT,
+		Class:  dns.ClassINET,
+		Ttl:    0,
+	}
+
+	return t
 }
 
 func clientString(a net.Addr) string {
