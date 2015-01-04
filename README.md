@@ -14,13 +14,12 @@ A simple wildcard DNS inspired by [xip.io](http://xip.io/)
 bar.baz.10.0.0.4.xip.name  resolves to  10.0.0.4
 ```
 
-### How does it work?
+## How does it work?
 
-xip.name runs a custom DNS server which extracts any IP address found
+xip.name runs a custom Domain Name Server which extracts any IP address found
 in the requested domain name and sends it back in the response.
 
-
-### Does it cost anything to use xip.name?
+## Does it cost anything to use xip.name?
 
 No, but you are welcome to donate if you find the service useful.
 
