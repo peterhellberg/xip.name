@@ -25,6 +25,8 @@ No, but you are welcome to donate if you find the service useful.
 
 Bitcoin: **[16f4vuZcpybd7rfprjB6Ki87BNVbtMA1M5](https://blockchain.info/address/16f4vuZcpybd7rfprjB6Ki87BNVbtMA1M5)**
 
+You can also help out by signing up to DigitalOcean using my [referral link](https://www.digitalocean.com/?refcode=cd245791f86e).
+
 ## Credits
 
 xip.name is built on top of [Miek](http://miek.nl)’s lovely [dns package](https://github.com/miekg/dns) for Go.
