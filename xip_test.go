@@ -35,15 +35,20 @@ func TestHandleDNS(t *testing.T) {
 
 func TestNewServer(t *testing.T) {
 	for _, tt := range []struct {
-		net string
+		net  string
+		addr string
 	}{
-		{"abc"},
-		{"xyz"},
+		{"abc", ":53"},
+		{"xyz", "127.0.0.2:5353"},
 	} {
-		s := newServer(tt.net)
+		s := newServer(tt.addr, tt.net)
 
 		if got, want := s.Net, tt.net; got != want {
 			t.Fatalf("s.Net = %q, want %q", got, want)
+		}
+
+		if got, want := s.Addr, tt.addr; got != want {
+			t.Fatalf("s.Addr = %q, want %q", got, want)
 		}
 	}
 }

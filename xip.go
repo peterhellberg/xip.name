@@ -68,8 +68,8 @@ func main() {
 
 	dns.HandleFunc(*fqdn, handleDNS)
 
-	go serve("tcp")
-	go serve("udp")
+	go serve(*addr, "tcp")
+	go serve(*addr, "udp")
 
 	sig := make(chan os.Signal)
 	signal.Notify(sig, syscall.SIGINT, syscall.SIGTERM)
@@ -135,15 +135,15 @@ func handleDNS(w dns.ResponseWriter, r *dns.Msg) {
 	w.WriteMsg(m)
 }
 
-func serve(net string) {
-	if err := newServer(net).ListenAndServe(); err != nil {
-		fmt.Printf("Failed to setup the "+net+" server: %s\n", err.Error())
+func serve(addr, net string) {
+	if err := newServer(addr, net).ListenAndServe(); err != nil {
+		fmt.Printf("Failed to setup the %q server: %s\n", net, err.Error())
 	}
 }
 
-func newServer(net string) *dns.Server {
+func newServer(addr, net string) *dns.Server {
 	return &dns.Server{
-		Addr:       *addr,
+		Addr:       addr,
 		Net:        net,
 		TsigSecret: nil,
 	}
