@@ -63,6 +63,8 @@ func main() {
 
 	defaultIP = net.ParseIP(*ip).To4()
 
+	// Ensure that a FQDN is passed in (often the trailing . is omitted)
+	*fqdn = dns.Fqdn(*fqdn)
 	dns.HandleFunc(*fqdn, handleDNS)
 
 	go serve("tcp")
