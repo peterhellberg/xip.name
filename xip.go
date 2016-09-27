@@ -65,6 +65,7 @@ func main() {
 
 	// Ensure that a FQDN is passed in (often the trailing . is omitted)
 	*fqdn = dns.Fqdn(*fqdn)
+
 	dns.HandleFunc(*fqdn, handleDNS)
 
 	go serve("tcp")
@@ -112,6 +113,10 @@ func handleDNS(w dns.ResponseWriter, r *dns.Msg) {
 
 		err := tr.Out(w, r, c)
 		if err != nil {
+			if *verbose {
+				fmt.Printf("%v\n", err)
+			}
+
 			return
 		}
 
