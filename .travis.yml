@@ -1,7 +1,5 @@
 language: go
 
+go: 1.7.1
+
 sudo: false
-
-go: 1.5.2
-
-install: go get github.com/miekg/dns
