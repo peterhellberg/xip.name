@@ -51,7 +51,7 @@ import (
 var (
 	verbose = flag.Bool("v", false, "Verbose")
 	fqdn    = flag.String("fqdn", "xip.name.", "FQDN to handle")
-	port    = flag.String("p", "53", "The port to bind on")
+	addr    = flag.String("addr", ":53", "The addr to bind on")
 	ip      = flag.String("ip", "188.166.43.179", "The IP of xip.name")
 
 	ipPattern = regexp.MustCompile(`(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})`)
@@ -129,15 +129,14 @@ func handleDNS(w dns.ResponseWriter, r *dns.Msg) {
 }
 
 func serve(net string) {
-	err := newServer(net).ListenAndServe()
-	if err != nil {
+	if err := newServer(net).ListenAndServe(); err != nil {
 		fmt.Printf("Failed to setup the "+net+" server: %s\n", err.Error())
 	}
 }
 
 func newServer(net string) *dns.Server {
 	return &dns.Server{
-		Addr:       ":" + *port,
+		Addr:       *addr,
 		Net:        net,
 		TsigSecret: nil,
 	}
