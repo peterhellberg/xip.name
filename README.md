@@ -3,7 +3,7 @@
 
 [![Build Status](https://travis-ci.org/peterhellberg/xip.name.svg?branch=master)](https://travis-ci.org/peterhellberg/xip.name)
 [![GoDoc](https://img.shields.io/badge/godoc-reference-blue.svg?style=flat)](https://godoc.org/github.com/peterhellberg/xip.name)
-[![License MIT](https://img.shields.io/badge/license-MIT-lightgrey.svg?style=flat)](https://github.com/peterhellberg/xip.name/blob/master/LICENSE)
+[![License BSD](https://img.shields.io/badge/license-BSD-lightgrey.svg?style=flat)](https://github.com/peterhellberg/xip.name/blob/master/LICENSE)
 
 A simple wildcard DNS inspired by [xip.io](http://xip.io/)
 
