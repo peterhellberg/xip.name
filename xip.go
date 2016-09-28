@@ -73,15 +73,8 @@ func main() {
 
 	sig := make(chan os.Signal)
 	signal.Notify(sig, syscall.SIGINT, syscall.SIGTERM)
-
-loop:
-	for {
-		select {
-		case s := <-sig:
-			fmt.Printf("\nSignal (%d) received, stopping\n", s)
-			break loop
-		}
-	}
+	s := <-sig
+	fmt.Printf("Signal (%v) received, stopping\n", s)
 }
 
 func handleDNS(w dns.ResponseWriter, r *dns.Msg) {
