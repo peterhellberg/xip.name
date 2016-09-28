@@ -78,7 +78,7 @@ func main() {
 }
 
 func handleDNS(w dns.ResponseWriter, r *dns.Msg) {
-	m := new(dns.Msg)
+	m := &dns.Msg{}
 	m.SetReply(r)
 
 	if len(r.Question) == 0 {
@@ -113,7 +113,21 @@ func handleDNS(w dns.ResponseWriter, r *dns.Msg) {
 			return
 		}
 
-		soa, _ := dns.NewRR(`xip.name. xip.name. 0 IN SOA 2014123101 21600 7200 604800 3600`)
+		soa := &dns.SOA{
+			Hdr: dns.RR_Header{
+				Name:   *fqdn,
+				Rrtype: dns.TypeSOA,
+				Class:  dns.ClassINET,
+				Ttl:    1440,
+			},
+			Ns:      *fqdn,
+			Serial:  2014123101,
+			Mbox:    *fqdn,
+			Refresh: 21600,
+			Retry:   7200,
+			Expire:  604800,
+			Minttl:  3600,
+		}
 
 		c <- &dns.Envelope{RR: []dns.RR{soa, t, rr, soa}}
 		w.Hijack()
@@ -142,35 +156,34 @@ func newServer(addr, net string) *dns.Server {
 	}
 }
 
-func dnsRR(name string) (rr dns.RR) {
-	rr = new(dns.A)
-	rr.(*dns.A).Hdr = dns.RR_Header{
-		Name:   name,
-		Rrtype: dns.TypeA,
-		Class:  dns.ClassINET,
-		Ttl:    300,
+func dnsRR(name string) (rr *dns.A) {
+	rr = &dns.A{
+		Hdr: dns.RR_Header{
+			Name:   name,
+			Rrtype: dns.TypeA,
+			Class:  dns.ClassINET,
+			Ttl:    300,
+		},
+		A: defaultIP,
 	}
 
 	if ipStr := ipPattern.FindString(name); ipStr != "" {
-		rr.(*dns.A).A = net.ParseIP(ipStr).To4()
-	} else {
-		rr.(*dns.A).A = defaultIP
+		rr.A = net.ParseIP(ipStr).To4()
 	}
 
 	return rr
 }
 
 func dnsTXT(s string) *dns.TXT {
-	t := new(dns.TXT)
-	t.Txt = []string{"Client: " + s}
-	t.Hdr = dns.RR_Header{
-		Name:   *fqdn,
-		Rrtype: dns.TypeTXT,
-		Class:  dns.ClassINET,
-		Ttl:    0,
+	return &dns.TXT{
+		Hdr: dns.RR_Header{
+			Name:   *fqdn,
+			Rrtype: dns.TypeTXT,
+			Class:  dns.ClassINET,
+			Ttl:    0,
+		},
+		Txt: []string{"Client: " + s},
 	}
-
-	return t
 }
 
 func clientString(a net.Addr) string {
