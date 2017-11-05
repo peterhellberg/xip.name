@@ -7,15 +7,15 @@ linux:
 	GOOS=linux CGO_ENABLED=0 go build -o xip.linux xip.go
 
 init:
-	scp etc/init/xip.name.conf root@xip.name:/etc/init/
+	scp etc/init/xip.name.conf root@188.166.43.179:/etc/init/
 
 web:
-	scp usr/share/nginx/html/* root@xip.name:/usr/share/nginx/html/
+	scp usr/share/nginx/html/* root@188.166.43.179:/usr/share/nginx/html/
 
 deploy: linux init web
-	ssh root@xip.name 'service xip.name stop || true'
-	scp xip.linux root@xip.name:/usr/local/bin/xip.name
-	ssh root@xip.name 'service xip.name start'
+	ssh root@188.166.43.179 'service xip.name stop || true'
+	scp xip.linux root@188.166.43.179:/usr/local/bin/xip.name
+	ssh root@188.166.43.179 'service xip.name start'
 
 run:
 	go run xip.go -p 8053 -v
