@@ -60,6 +60,8 @@ func TestDnsRR(t *testing.T) {
 	}{
 		{"abc", "abc\t300\tIN\tA\t"},
 		{"xyz", "xyz\t300\tIN\tA\t"},
+		{"nr1.10.0.0.1", "nr1.10.0.0.1\t300\tIN\tA\t10.0.0.1"},
+		{"sub.10.0.0.1", "sub.10.0.0.1\t300\tIN\tA\t10.0.0.1"},
 	} {
 		rr := dnsRR(tt.name)
 
