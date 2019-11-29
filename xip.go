@@ -54,7 +54,7 @@ var (
 	addr    = flag.String("addr", ":53", "The addr to bind on")
 	ip      = flag.String("ip", "188.166.43.179", "The IP of xip.name")
 
-	ipPattern = regexp.MustCompile(`(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})`)
+	ipPattern = regexp.MustCompile(`(\b\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})`)
 	defaultIP net.IP
 )
 
